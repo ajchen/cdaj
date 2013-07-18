@@ -1,0 +1,48 @@
+<project default="compile" basedir=".">
+    <description>
+    	ant build file for cdaj project. must run from current dir.
+    </description>
+	
+	<!-- Properties -->
+
+	<property name="app.name" value="cdaj"/>
+	<property name="app.home" value="."/> 
+	<property name="src.dir" value="${app.home}/src"/>
+	<property name="build.dir" value="${app.home}/build"/>
+	<property name="class.dir" value="${build.dir}/classes"/>
+	<property name="tmp.dir" value="${build.dir}/tmp"/>
+	<property name="lib.dir" value="${app.home}/lib"/>
+	<property name="dist.dir" value="${app.home}"/>	
+	<property name="jar.file" value="${dist.dir}/${app.name}.jar"/>
+	<property name="src-jar.file" value="${dist.dir}/${app.name}-src.jar"/>
+
+	<!-- Build Targets -->
+
+	<path id="classpath-compile">
+		<fileset dir="${lib.dir}">
+		    <include name="*.jar"/>
+		</fileset>
+	</path>
+
+	<target name="clean" description="delete build dirs" >
+	    <delete dir="${build.dir}" includeemptydirs="true" failonerror="false" />
+  </target>
+	
+	<target name="init" description="create build dir">
+	    <mkdir dir="${build.dir}"/>
+	    <mkdir dir="${class.dir}"/>
+	</target>
+
+	<target name="compile" depends="init" description="compile java classes" >
+	    <javac srcdir="${src.dir}" 
+	    	classpathref="classpath-compile" 
+	    	destdir="${class.dir}"
+	    	encoding="utf-8" debug="on"  deprecation="off" includeantruntime="false" />
+	</target>
+	
+	<target name="jar" depends="clean, init, compile" description="make jar files for app">
+	    <jar basedir="${class.dir}" jarfile="${jar.file}" />
+	    <jar basedir="${src.dir}" jarfile="${src-jar.file}" />
+ 	</target>
+
+</project>
